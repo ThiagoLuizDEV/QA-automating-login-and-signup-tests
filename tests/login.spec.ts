@@ -10,5 +10,6 @@ test('Login with valid credentials', async ({ page }) => {
     await page.locator('[data-test="login-button"]').click();
 
     await expect(page.url()).toBe('https://www.saucedemo.com/inventory.html');
-
+    const productsTitle = await page.locator('.header_secondary_container > span');
+    await expect(productsTitle).toHaveText('Products');
 });
