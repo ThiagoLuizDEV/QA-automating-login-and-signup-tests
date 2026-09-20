@@ -19,4 +19,13 @@ test('all products names begin with "Sauce Labs"', async ({ page }) => {
             await expect(item.slice(0, 10)).toBe('Sauce Labs');
         };    
     });
+
+    await test.step('check description products', async () => {
+        const products = await page.locator('.inventory_item_desc');
+        const productCount = await products.allTextContents();
+        for (const item of productCount) {
+            expect(item).not.toMatch(/[A-Za-z]+\.[A-Za-z]+/);
+
+        }
+    });
 });
