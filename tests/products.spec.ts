@@ -22,10 +22,28 @@ test('all products names begin with "Sauce Labs"', async ({ page }) => {
 
     await test.step('check description products', async () => {
         const products = await page.locator('.inventory_item_desc');
-        const productCount = await products.allTextContents();
-        for (const item of productCount) {
+        const productDescriptions = await products.allTextContents();
+        for (const item of productDescriptions) {
             expect(item).not.toMatch(/[A-Za-z]+\.[A-Za-z]+/);
 
         }
     });
+
+    await test.step('check price products', async () => {
+        const products = await page.locator('.inventory_item_price');
+        const productPrices = await products.allTextContents();
+        for (const item of productPrices) {
+            expect(item).toMatch(/^\$\d+\.\d{2}$/);
+        }
+    });
+
+    await test.step('check image products', async () => {
+        const products = await page.locator('.inventory_item_img');
+        const productImages = await products.all();
+        for (const item of productImages) {
+            const imageUrl = await item.getAttribute('src');
+            expect(imageUrl).toMatch(/https:\/\/www\.saucedemo\.com\/static\/media\/.+\.jpg/);
+        }
+    });
+    
 });
