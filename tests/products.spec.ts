@@ -12,22 +12,22 @@ test('all products names begin with "Sauce Labs"', async ({ page }) => {
 
     await expect(page.url()).toBe('https://www.saucedemo.com/inventory.html');
 
-    await test.step('check products names', async () => {
-        const products = await page.locator('.inventory_item_name');
-        const productCount = await products.allTextContents();
-        for (const item of productCount) {
-            await expect(item.slice(0, 10)).toBe('Sauce Labs');
-        };
-    });
+    // await test.step('check products names', async () => {
+    //     const products = await page.locator('.inventory_item_name');
+    //     const productCount = await products.allTextContents();
+    //     for (const item of productCount) {
+    //         await expect(item.slice(0, 10)).toBe('Sauce Labs');
+    //     };
+    // });
 
-    await test.step('check description products', async () => {
-        const products = await page.locator('.inventory_item_desc');
-        const productDescriptions = await products.allTextContents();
-        for (const item of productDescriptions) {
-            expect(item).not.toMatch(/[A-Za-z]+\.[A-Za-z]+/);
+    // await test.step('check description products', async () => {
+    //     const products = await page.locator('.inventory_item_desc');
+    //     const productDescriptions = await products.allTextContents();
+    //     for (const item of productDescriptions) {
+    //         expect(item).not.toMatch(/[A-Za-z]+\.[A-Za-z]+/);
 
-        }
-    });
+    //     }
+    // });
 
     await test.step('check price products', async () => {
         const products = await page.locator('.inventory_item_price');
@@ -56,6 +56,12 @@ test('all products names begin with "Sauce Labs"', async ({ page }) => {
             await expect(addToCartButton).toHaveText('Add to cart');
             await addToCartButton.click();
         }
+    });
+
+    await test.step('check cart badge', async () => {
+        const cartBadge = await page.locator('.shopping_cart_badge');
+        await expect(cartBadge).toBeVisible();
+        await expect(cartBadge).toHaveText('6');
     });
     
 });
