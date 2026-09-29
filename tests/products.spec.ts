@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 test('all products names begin with "Sauce Labs"', async ({ page }) => {
-    test.fail(true, 'This test is expected to fail because the product names do not all begin with "Sauce Labs"');
+    // test.fail(true, 'This test is expected to fail because the product names do not all begin with "Sauce Labs"');
 
     await test.step('login', async () => {
         await page.goto('https://www.saucedemo.com/');
@@ -17,7 +17,7 @@ test('all products names begin with "Sauce Labs"', async ({ page }) => {
         const productCount = await products.allTextContents();
         for (const item of productCount) {
             await expect(item.slice(0, 10)).toBe('Sauce Labs');
-        };    
+        };
     });
 
     await test.step('check description products', async () => {
@@ -38,11 +38,23 @@ test('all products names begin with "Sauce Labs"', async ({ page }) => {
     });
 
     await test.step('check image products', async () => {
-        const products = await page.locator('.inventory_item_img');
-        const productImages = await products.all();
-        for (const item of productImages) {
-            const imageUrl = await item.getAttribute('src');
-            expect(imageUrl).toMatch(/https:\/\/www\.saucedemo\.com\/static\/media\/.+\.jpg/);
+    const products = await page.locator('.inventory_item_img img');
+    const productImages = await products.all();
+
+    for (const item of productImages) {
+        const imageUrl = await item.getAttribute('src');
+        expect(imageUrl).toMatch(/^\/assets\/.+\.jpg$/);
+    }
+});
+
+    await test.step('check add to cart button', async () => {
+        const products = await page.locator('.inventory_item');
+        const productCount = await products.count();
+        for (let i = 0; i < productCount; i++) {
+            const addToCartButton = await products.nth(i).locator('button');
+            await expect(addToCartButton).toBeVisible();
+            await expect(addToCartButton).toHaveText('Add to cart');
+            await addToCartButton.click();
         }
     });
     
