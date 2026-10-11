@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 test('all products names begin with "Sauce Labs"', async ({ page }) => {
-    // test.fail(true, 'This test is expected to fail because the product names do not all begin with "Sauce Labs"');
+    test.fail(true, 'This test is expected to fail because the product names do not all begin with "Sauce Labs"');
 
     await test.step('login', async () => {
         await page.goto('https://www.saucedemo.com/');
@@ -56,6 +56,12 @@ test('all products names begin with "Sauce Labs"', async ({ page }) => {
             await expect(addToCartButton).toHaveText('Add to cart');
             await addToCartButton.click();
         }
+    });
+
+    await test.step('check cart badge', async () => {
+        const cartBadge = await page.locator('.shopping_cart_badge');
+        await expect(cartBadge).toBeVisible();
+        await expect(cartBadge).toHaveText('6');
     });
     
 });
